@@ -203,7 +203,7 @@ class EPGWindow(xbmcgui.WindowXMLDialog):
                 raise Exception()
         except Exception,e:
             self.log('VideoWindow = False')
-            self.getControl(523).setVisible(False)
+            #self.getControl(523).setVisible(False)
             
         try:
             for i in range(3):

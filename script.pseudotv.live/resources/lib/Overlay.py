@@ -1102,6 +1102,16 @@ class TVOverlay(xbmcgui.WindowXMLDialog):
                     self.seektime = self.SmartSeek(mediapath, seektime1, seektime2, overtime)
                 else:
                     try:
+                        for x in xrange(20): # wait until video has started playing (getTime() > 0.0) before trying to seek
+                                xbmc.log("Overlay.py: Staring seeking loop iteration (%d)..." % x)
+                                #filePlaying = xbmc.Player().getPlayingFile()
+                                #xbmc.log("Overlay.py: Currently Playing %s, we want to play %s." % (filePlaying, title))
+                                getTime = float(xbmc.Player().getTime()) # float to return 0.0 in case of strange getTime() value.
+                                xbmc.log("Overlay.py: xbmc.Player().getTime() value: %f, seektime1 is %f" % (getTime, seektime1))
+                                if (getTime > 0.0): # if getTime == 0.0, too early to seek.
+                                    break
+                                xbmc.log("Overlay.py: Seek pausing 5 milliseconds... (Iteration: %d)" % x)
+                                xbmc.sleep(5)
                         self.Player.seekTime(seektime1)
                         self.seektime = seektime1
                         self.log("setChannel, using seektime1")
@@ -2295,8 +2305,8 @@ class TVOverlay(xbmcgui.WindowXMLDialog):
      
     def Paused(self, action=False):
         self.log('Paused')
-        self.setBackgroundVisible(True)
-        self.setBackgroundLabel('Paused')   
+        #self.background.setVisible(True)
+        self.background.setLabel('Paused')   
         if action and self.Player.isPlaying():
             json_query = ('{"jsonrpc":"2.0","method":"Player.PlayPause","params":{"playerid":1}, "id": 1}')
             self.channelList.sendJSON(json_query)
