@@ -95,7 +95,7 @@ class MyPlayer(xbmc.Player):
         if self.overlay.isExiting == True:
             return True
             
-        if self.isPlaybackPaused == True:
+        if self.isPlaybackPaused() == True:
             return True
             
         if self.isPlaybackValid() == True:
@@ -2306,7 +2306,7 @@ class TVOverlay(xbmcgui.WindowXMLDialog):
     def Paused(self, action=False):
         self.log('Paused')
         #self.background.setVisible(True)
-        self.background.setLabel('Paused')   
+        #self.background.setLabel('Paused')
         if action and self.Player.isPlaying():
             json_query = ('{"jsonrpc":"2.0","method":"Player.PlayPause","params":{"playerid":1}, "id": 1}')
             self.channelList.sendJSON(json_query)
